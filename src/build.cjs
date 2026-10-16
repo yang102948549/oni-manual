@@ -13,7 +13,7 @@ const dir = __dirname;
   if (subset) {
     const chars = new Set(body + js);
     for (let c = 0x20; c < 0x7f; c++) chars.add(String.fromCharCode(c));
-    for (const c of "·…—–→↔↶↷⇪⇩✓×−＋①②③④⑤⑥⑦⑧▦⚠●“”‘’") chars.add(c);
+    for (const c of "·…—–→↔↶↷✓×−＋①②③④⑤⑥⑦⑧▦⚠●“”‘’") chars.add(c);
     font = await subset(font, [...chars].join(""), { targetFormat: "woff2", variationAxes: { wght: { min: 45, max: 920 } } });
   }
   const face = `@font-face{font-family:"Pretendard Variable";font-weight:45 920;font-style:normal;font-display:swap;src:url(data:font/woff2;base64,${font.toString("base64")}) format("woff2")}`;

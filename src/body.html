@@ -112,6 +112,7 @@ code{font-family:inherit;font-weight:600;font-size:.92em;background:var(--sunk);
 .dl-btn:hover{background:var(--accent-ink)}
 .dl-meta{font-size:13.5px;color:var(--ink-3)}
 .dl-link{font-size:13.5px}
+.icon-ref{display:inline-flex;vertical-align:-3px;padding:0 5px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
 .tip{background:var(--accent-soft)}.tip b:first-child{color:var(--accent-ink)}
 .warn{background:var(--warn-soft)}.warn b:first-child{color:var(--warn)}
 table.ref{border-collapse:collapse;width:100%;font-size:14.5px;line-height:1.6}
@@ -410,7 +411,7 @@ mark{background:var(--warn-soft);color:inherit;border-radius:3px}
             <span class="row" style="gap:6px">2026학년도 2학기 중간고사 › <b>시험 설정</b><span class="pin" data-pin="3" role="button" tabindex="0">3</span></span>
             <span class="row" style="gap:10px"><span style="color:var(--app-amber)">● 저장 안 됨</span><button class="btn soft" style="padding:2px 10px">저장</button><span class="pin" data-pin="4" role="button" tabindex="0">4</span>
             <span>↶ 되돌리기 ↷ 다시 실행</span><span class="pin" data-pin="5" role="button" tabindex="0">5</span>
-            <span>⇪ ⇩</span><span class="pin" data-pin="6" role="button" tabindex="0">6</span></span>
+            <span class="row" style="gap:10px"><span title="고사 파일 가져오기" style="display:inline-flex"><svg class="ico" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span><span title="고사 파일 내보내기" style="display:inline-flex"><svg class="ico" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span></span><span class="pin" data-pin="6" role="button" tabindex="0">6</span></span>
           </div>
           <div class="ct">
             <h5>시험 설정</h5>
@@ -786,8 +787,8 @@ mark{background:var(--warn-soft);color:inherit;border-radius:3px}
   <div class="ch-body">
     <ul class="dots">
       <li><b>기록</b> 화면에는 이 PC에 저장된 고사가 최근 순으로 나옵니다. 눌러서 엽니다. 지금 열린 고사에는 <b>현재 고사</b> 표시가 붙습니다.</li>
-      <li><b>고사 파일 내보내기</b>(상단 ⇩ 아이콘 또는 기록 화면의 <span class="ui">현재 고사 내보내기</span>): 고사 전체(일정·고사실·교사·조건·배정 결과)를 JSON 파일 하나로 저장합니다. 백업과 다른 PC로 옮길 때 씁니다.</li>
-      <li><b>고사 파일 가져오기</b>(상단 ⇪ 아이콘): JSON 파일을 새 고사로 엽니다.</li>
+      <li><b>고사 파일 내보내기</b>(상단 <span class="icon-ref"><svg class="ico" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span> 아이콘 또는 기록 화면의 <span class="ui">현재 고사 내보내기</span>): 고사 전체(일정·고사실·교사·조건·배정 결과)를 JSON 파일 하나로 저장합니다. 백업과 다른 PC로 옮길 때 씁니다.</li>
+      <li><b>고사 파일 가져오기</b>(상단 <span class="icon-ref"><svg class="ico" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span> 아이콘): JSON 파일을 새 고사로 엽니다.</li>
       <li>저장 파일이 손상되면 직전 정상 백업에서 자동 복구하고 “직전 정상 백업에서 복구했습니다”를 알립니다.</li>
     </ul>
     <h3>새 학기에 지난 자료 재사용하기</h3>
