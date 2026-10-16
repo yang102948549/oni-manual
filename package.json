@@ -1,0 +1,12 @@
+{
+  "name": "oni-manual",
+  "version": "1.3.0",
+  "private": true,
+  "description": "Oni 감독 사용 설명서 (GitHub Pages)",
+  "scripts": {
+    "build": "node src/build.cjs"
+  },
+  "devDependencies": {
+    "subset-font": "2.3.0"
+  }
+}

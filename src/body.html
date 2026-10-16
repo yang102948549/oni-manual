@@ -1,0 +1,859 @@
+<title>Oni 감독 사용 설명서</title>
+<meta name="description" content="Oni 감독(시험감독 자동 배정 프로그램) 구매자용 단계별 사용 설명서와 연습 화면">
+<style>
+/*@@PRETENDARD@@*/
+/* Layout: 앱과 같은 왼쪽 목차 + 본문 한 열. 각 단계는 "설명 → 앱 화면 → 직접 해보기" 순서. */
+:root{
+  --bg:#F6F8F8; --surface:#FFFFFF; --sunk:#EEF3F2; --ink:#262624; --ink-2:#55554F; --ink-3:#74746C;
+  --line:#D5E0DE; --line-2:#AEC0BD;
+  --accent:#0B7F79; --accent-ink:#08635E; --accent-soft:#E3F4F1; --brand:#8B68E3; --brand-soft:#F1ECFD;
+  --ok:#087D6B; --ok-soft:#E5F6F1; --bad:#C43F35; --bad-soft:#FCECE9; --warn:#8F5C00; --warn-soft:#FFF3DF;
+  --shadow:0 1px 2px rgba(20,40,38,.06),0 6px 24px rgba(20,40,38,.06);
+  /* 앱 화면 모형은 실제 프로그램처럼 항상 밝은 화면입니다. */
+  --app-bg:#F8FAFA; --app-side:#F3F5F4; --app-surface:#FFFFFF; --app-ink:#292927; --app-ink-2:#595955; --app-ink-3:#8A8A83;
+  --app-line:#D6E1DF; --app-fill:#EFF3F2; --app-accent:#0B7F79; --app-accent-soft:#E7F6F4; --app-red:#C43F35; --app-red-soft:#FDEEEB;
+  --app-amber:#956000; --app-amber-soft:#FFF5E5; --app-purple:#9270E8; --app-blue:#2F6FD6;
+  --f-body:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","맑은 고딕",sans-serif;
+  --f-display:var(--f-body); --f-mono:var(--f-body);
+  --toc:270px; --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141817; --surface:#1C2120; --sunk:#232A29; --ink:#ECEFEE; --ink-2:#B9C1BF; --ink-3:#8E9896;
+  --line:#2F3937; --line-2:#455452; --accent:#47BDB4; --accent-ink:#7AD6CE; --accent-soft:#17332F; --brand:#B49CF5; --brand-soft:#2A2440;
+  --ok:#5CC9AE; --ok-soft:#173129; --bad:#F08A7F; --bad-soft:#3A1F1C; --warn:#E8B860; --warn-soft:#352A14;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141817; --surface:#1C2120; --sunk:#232A29; --ink:#ECEFEE; --ink-2:#B9C1BF; --ink-3:#8E9896;
+  --line:#2F3937; --line-2:#455452; --accent:#47BDB4; --accent-ink:#7AD6CE; --accent-soft:#17332F; --brand:#B49CF5; --brand-soft:#2A2440;
+  --ok:#5CC9AE; --ok-soft:#173129; --bad:#F08A7F; --bad-soft:#3A1F1C; --warn:#E8B860; --warn-soft:#352A14;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.25); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75;letter-spacing:-.011em;font-feature-settings:"ss06";-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+a{color:var(--accent-ink);text-underline-offset:3px}
+button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* 간격 단위: 4 · 8 · 12 · 16 · 24 · 32 · 48 · 96 */
+.wrap{display:grid;grid-template-columns:var(--toc) minmax(0,1fr);max-width:1240px;margin:0 auto;padding-inline:24px;gap:64px}
+
+/* 목차 */
+.toc{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow:auto;padding-block:32px;display:flex;flex-direction:column;gap:24px;scrollbar-width:thin}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .tg{width:28px;height:16px;border-radius:8px;background:var(--brand);position:relative;flex:none}
+.brand .tg::after{content:"";position:absolute;right:2px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--surface)}
+.brand b{font-size:17px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.brand small{display:block;font-size:12px;color:var(--ink-3);line-height:1.3}
+.progress{display:grid;gap:6px;font-size:12.5px;color:var(--ink-3)}
+.progress b{color:var(--ink);font-weight:600}
+.progress .bar{height:3px;border-radius:2px;background:var(--line);overflow:hidden}
+.progress .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.toc input[type=search]{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 12px;font-size:13.5px}
+.toc input[type=search]::placeholder{color:var(--ink-3)}
+.toc nav{display:grid;gap:20px}
+.toc .grp{font-size:12px;font-weight:600;color:var(--ink-3);padding-left:10px;margin-bottom:4px}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.toc li a{display:flex;align-items:center;gap:10px;padding:5px 10px;border-radius:6px;text-decoration:none;color:var(--ink-2);font-size:14px;line-height:1.45}
+.toc li a:hover{background:var(--sunk);color:var(--ink)}
+.toc li a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 0 0 1px var(--line)}
+.toc li a .n{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums;color:var(--ink-3);min-width:20px}
+.toc li a .ck{margin-left:auto;width:14px;height:14px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:9px;color:transparent}
+.toc li a.done .ck{background:var(--ok);color:var(--surface)}
+.toc .theme{display:flex;gap:4px;font-size:12px;color:var(--ink-3);align-items:center;margin-top:auto;padding-top:8px}
+.toc .theme button{border:0;background:none;border-radius:6px;padding:2px 8px;cursor:pointer;font-size:12px;color:var(--ink-3)}
+.toc .theme button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.toc-toggle{display:none}
+
+/* 본문: 글은 읽기 폭(--text), 표·연습 화면은 넓은 폭(--wide) */
+main{--text:720px;--wide:980px;min-width:0;padding-block:72px 120px;display:grid;gap:96px;align-content:start}
+.hero{display:grid;gap:20px;max-width:var(--wide)}
+.eyebrow{font-size:13px;color:var(--brand);font-weight:600}
+h1{font-size:clamp(30px,4vw,42px);font-weight:750;line-height:1.25;letter-spacing:-.035em;margin:0;text-wrap:balance}
+.lede{font-size:17.5px;line-height:1.75;color:var(--ink-2);max-width:var(--text);margin:0}
+.meta{font-size:13.5px;color:var(--ink-3);margin:0}
+
+/* 전체 흐름 */
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 20px;margin-top:20px;padding-top:28px;border-top:1px solid var(--line)}
+.flow a{display:grid;gap:4px;align-content:start;text-decoration:none;color:var(--ink)}
+.flow a .where{font-size:12px;color:var(--ink-3)}
+.flow a b{font-size:15.5px;font-weight:650;letter-spacing:-.02em}
+.flow a small{font-size:13px;color:var(--ink-2);line-height:1.55}
+.flow a:hover b{color:var(--accent-ink);text-decoration:underline;text-underline-offset:4px}
+
+/* 장 */
+section.ch{display:grid;gap:24px;max-width:var(--wide)}
+section.ch>*{min-width:0}
+.ch-head{display:grid;gap:8px;max-width:var(--text)}
+.ch-head .path{font-size:13px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.ch-head .path b{color:var(--ink-2);font-weight:500}
+.ch-head .path .num{font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent-ink)}
+.ch-head .path .num::after{content:"·";margin-left:6px;color:var(--ink-3);font-weight:400}
+h2{font-size:clamp(24px,2.4vw,28px);font-weight:700;line-height:1.35;letter-spacing:-.03em;margin:0;text-wrap:balance}
+h3{font-size:18px;font-weight:700;letter-spacing:-.022em;margin:20px 0 -4px;line-height:1.45;text-wrap:balance}
+h4{font-size:16px;font-weight:650;margin:0;letter-spacing:-.015em}
+p{margin:0}
+.ch-body{display:grid;gap:16px}
+.ch-body>p,.ch-body>ol,.ch-body>ul,.ch-body>h3,.ch-body>.note,.ch-body>.tip,.ch-body>.warn{max-width:var(--text)}
+.why{color:var(--ink-2);font-size:16.5px}
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:s}
+ol.steps>li{counter-increment:s;display:grid;grid-template-columns:24px minmax(0,1fr);gap:14px;align-items:start}
+ol.steps>li::before{content:counter(s);display:grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1px solid var(--line-2);color:var(--ink-2);font-weight:600;font-size:12.5px;margin-top:2px;font-variant-numeric:tabular-nums}
+ul.dots{margin:0;padding-left:18px;display:grid;gap:8px}
+ul.dots li::marker{color:var(--ink-3)}
+.ui{display:inline-block;font-size:.87em;font-weight:600;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:0 7px;line-height:1.65;white-space:nowrap;color:var(--ink);box-shadow:0 1px 0 var(--line)}
+.ui.p{background:var(--accent);border-color:var(--accent);color:var(--surface);box-shadow:none}
+kbd{font-size:.82em;font-weight:600;border:1px solid var(--line);border-radius:5px;padding:1px 6px;background:var(--surface);box-shadow:0 1px 0 var(--line)}
+code{font-family:inherit;font-weight:600;font-size:.92em;background:var(--sunk);border-radius:4px;padding:1px 5px}
+.note,.tip,.warn{border-radius:8px;padding:14px 18px;display:grid;gap:4px;font-size:15px;line-height:1.7;background:var(--sunk)}
+.note b:first-child,.tip b:first-child,.warn b:first-child{font-size:13px;font-weight:650;color:var(--ink-2)}
+.tip{background:var(--accent-soft)}.tip b:first-child{color:var(--accent-ink)}
+.warn{background:var(--warn-soft)}.warn b:first-child{color:var(--warn)}
+table.ref{border-collapse:collapse;width:100%;font-size:14.5px;line-height:1.6}
+table.ref th,table.ref td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+table.ref th{font-size:12.5px;color:var(--ink-3);font-weight:600;border-bottom-color:var(--line-2)}
+table.ref td:first-child,table.ref th:first-child{padding-left:0;white-space:nowrap}
+table.ref tr:last-child td{border-bottom:0}
+.tscroll{overflow-x:auto;max-width:100%}
+.done-row{display:flex;padding-top:4px}
+.done-btn{border:0;background:none;padding:4px 0;cursor:pointer;font-size:13.5px;color:var(--ink-3);display:inline-flex;gap:8px;align-items:center}
+.done-btn::before{content:"";width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line-2);box-sizing:border-box}
+.done-btn:hover{color:var(--ink)}
+.done-btn[aria-pressed=true]{color:var(--ok)}
+.done-btn[aria-pressed=true]::before{background:var(--ok);border-color:var(--ok);box-shadow:inset 0 0 0 3px var(--bg)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:grid;gap:8px;align-content:start}
+.card p{font-size:14.5px;color:var(--ink-2);line-height:1.65}
+.case-tag{font-size:12px;font-weight:600;color:var(--brand)}
+
+/* ===== 연습 화면 (앱 모형) ===== */
+.try{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;min-width:0;margin-top:8px}
+.try-head{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--line)}
+.try-head .lbl{display:flex;gap:8px;align-items:center;font-weight:650;font-size:14px}
+.try-head .lbl::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand);align-self:center}
+.try-head .goal{font-size:13.5px;color:var(--ink-2);flex:1 1 260px}
+.try-head .reset{border:0;background:none;font-size:13px;padding:0;cursor:pointer;color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
+.app{background:var(--app-bg);color:var(--app-ink);font-family:var(--f-body);font-size:14px;line-height:1.5;letter-spacing:-.008em;font-variant-numeric:tabular-nums;padding:18px;display:grid;gap:14px;min-width:0;color-scheme:light}
+.app .scroll{overflow-x:auto;min-width:0}
+.app h5{margin:0;font-size:16px;font-weight:700}
+.app .desc{font-size:12.5px;color:var(--app-ink-2)}
+.app .panel{background:var(--app-surface);border:1px solid var(--app-line);border-radius:10px}
+.app .row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.app .btn{border:1px solid var(--app-line);background:var(--app-surface);border-radius:8px;padding:5px 12px;cursor:pointer;font-size:13.5px;color:var(--app-ink);display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.app .btn:hover{background:var(--app-fill)}
+.app .btn.primary{background:var(--app-accent);border-color:var(--app-accent);color:#fff}
+.app .btn.primary:hover{filter:brightness(.94)}
+.app .btn.ghost{color:var(--app-accent);border-color:var(--app-accent)}
+.app .btn.soft{background:var(--app-accent-soft);border-color:transparent;color:var(--app-accent);font-weight:600}
+.app .btn.danger{color:var(--app-red)}
+.app .btn:disabled{opacity:.45;cursor:not-allowed}
+.app .link{border:0;background:none;color:var(--app-accent);cursor:pointer;padding:2px 4px;font-size:13.5px}
+.app input[type=text],.app input[type=number],.app select{border:1px solid var(--app-line);background:var(--app-surface);border-radius:7px;padding:5px 9px;font-size:13.5px;color:var(--app-ink);min-width:0}
+.app input[type=number]{width:60px}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--app-fill);border-radius:7px;padding:3px 10px;font-weight:600;font-size:13.5px;position:relative;border:0;cursor:pointer;color:var(--app-ink)}
+.chip:hover{background:#E2E9E8}
+.chip .x{position:absolute;top:-6px;right:-6px;width:17px;height:17px;border-radius:50%;background:#fff;border:1px solid var(--app-line);font-size:11px;line-height:15px;text-align:center;color:var(--app-ink-2);display:none;cursor:pointer}
+.chip:hover .x,.chip:focus-within .x{display:block}
+.chip.sub{font-weight:500;font-size:12.5px;padding:2px 8px;cursor:default}
+.chip.add{background:none;color:var(--app-ink-3);font-weight:500}
+.role{display:inline-block;white-space:nowrap;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:600}
+.role.normal{background:var(--app-fill);color:var(--app-ink-2)}
+.role.sp{background:#EAF1FD;color:var(--app-blue)}
+.role.ex{background:var(--app-red-soft);color:var(--app-red)}
+.review{background:var(--app-amber-soft);color:var(--app-amber);border-radius:999px;font-size:11.5px;padding:1px 8px;font-weight:600;border:0;cursor:pointer}
+.app table.g{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;background:var(--app-surface)}
+.app table.g th,.app table.g td{border-bottom:1px solid var(--app-line);border-right:1px solid var(--app-line);padding:6px 8px;text-align:center;white-space:nowrap}
+.app table.g th{background:var(--app-fill);font-weight:600;color:var(--app-ink-2);font-size:12.5px}
+.app table.g tr>*:first-child{border-left:1px solid var(--app-line)}
+.app table.g thead tr:first-child>*{border-top:1px solid var(--app-line)}
+.app table.g td.name{font-weight:600;text-align:left}
+.toast{background:var(--app-accent-soft);color:var(--app-accent);border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600}
+.toast.bad{background:var(--app-red-soft);color:var(--app-red)}
+.toast.warn{background:var(--app-amber-soft);color:var(--app-amber)}
+.toast:empty{display:none}
+
+/* 고사실 */
+.room-row{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--app-line)}
+.room-row:last-child{border-bottom:0}
+.room-row .gl b{font-size:14px}.room-row .gl small{color:var(--app-ink-3);margin-left:4px}
+.room-row .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.school-hit{display:flex;justify-content:space-between;gap:10px;border:1px solid var(--app-line);border-radius:8px;padding:7px 12px;background:var(--app-surface);cursor:pointer;width:100%;text-align:left}
+.school-hit:hover{border-color:var(--app-accent)}
+.school-hit small{color:var(--app-ink-3)}
+
+/* 시험 일정 */
+.daycard{background:var(--app-surface);border:1px solid var(--app-line);border-radius:12px;padding:12px;display:grid;gap:10px;max-width:560px}
+.daycard .top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.daycard .top b{font-size:16px}
+.stepper{display:inline-flex;align-items:center;gap:8px}
+.stepper span{font-size:13px}
+.stepper .seg{display:inline-flex;border:1px solid var(--app-line);border-radius:7px;overflow:hidden}
+.stepper .seg button{border:0;background:var(--app-surface);width:30px;height:26px;cursor:pointer}
+.stepper .seg button+button{border-left:1px solid var(--app-line)}
+.sched td{padding:0!important;position:relative}
+.sched td input.subj{width:100%;border:0;background:transparent;text-align:center;padding:10px 4px;font-weight:600;font-size:14px;min-width:84px}
+.sched td input.subj:focus{background:var(--app-accent-soft);outline:2px solid var(--app-accent);outline-offset:-2px}
+.sched td.filled{background:#FBFDFD}
+.sched .multi{width:100%;border:0;background:none;padding:6px 4px;display:grid;gap:1px;cursor:pointer;font-size:12.5px;font-weight:600;min-width:84px}
+.sched .multi small{color:var(--app-ink-3);font-weight:500}
+.sched .plus{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:5px;border:1px solid var(--app-line);background:#fff;font-size:12px;line-height:15px;cursor:pointer;color:var(--app-accent);opacity:.25}
+.sched td:hover .plus,.sched td:focus-within .plus{opacity:1}
+.sched .part{position:absolute;bottom:2px;right:4px;font-size:10.5px;color:var(--app-amber);font-weight:700}
+.slotsum{display:grid;gap:4px;font-size:13px}
+.slotsum div{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
+.slotsum b{min-width:44px}
+.slotsum .ex{color:var(--app-red);font-size:12.5px}
+
+/* 모달 */
+.modal-back{position:absolute;inset:0;background:rgba(30,40,38,.35);display:grid;place-items:center;padding:16px;z-index:5}
+.modal{background:var(--app-surface);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.25);width:min(560px,100%);max-height:100%;overflow:auto;display:grid;color:var(--app-ink)}
+.modal header{padding:14px 18px;border-bottom:1px solid var(--app-line)}
+.modal header b{font-size:16px}.modal header small{display:block;color:var(--app-ink-3);font-size:12.5px}
+.modal .mb{padding:14px 18px;display:grid;gap:14px}
+.modal footer{padding:12px 18px;border-top:1px solid var(--app-line);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.stage{position:relative;min-height:120px}
+.sblock{border:1px solid var(--app-line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.sblock .tools{display:flex;gap:8px;align-items:center;font-size:13px}
+.roomgrid{display:flex;flex-wrap:wrap;gap:6px}
+.roomgrid button{border:1px solid var(--app-line);background:#fff;border-radius:7px;padding:4px 12px;cursor:pointer;font-weight:600;font-size:13px}
+.roomgrid button[aria-pressed=true]{background:var(--app-accent);border-color:var(--app-accent);color:#fff}
+.dashed{border:1.5px dashed var(--app-line);background:none;border-radius:10px;padding:8px;cursor:pointer;color:var(--app-accent);font-weight:600}
+
+/* 교사 */
+.pick-pop{position:absolute;z-index:6;background:#fff;border:1px solid var(--app-line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.15);padding:10px;display:grid;gap:8px;width:240px;text-align:left}
+.pick-pop .opts{display:flex;flex-wrap:wrap;gap:6px}
+.pick-pop .opts button{border:1px solid var(--app-line);background:#fff;border-radius:999px;padding:2px 10px;font-size:12.5px;cursor:pointer}
+.pick-pop .opts button[aria-pressed=true]{background:var(--app-accent);color:#fff;border-color:var(--app-accent)}
+.pick-pop .tabs{display:flex;gap:4px}
+.pick-pop .tabs button{border:0;background:var(--app-fill);border-radius:6px;padding:2px 8px;font-size:12px;cursor:pointer}
+.pick-pop .tabs button[aria-pressed=true]{background:var(--app-ink);color:#fff}
+.cellbtn{border:0;background:none;cursor:pointer;padding:2px;display:inline-flex;flex-wrap:wrap;gap:4px;justify-content:center;min-height:24px;align-items:center}
+.cellbtn .ph{color:var(--app-ink-3);font-size:12.5px}
+.importsrc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.importsrc .src{border:1px solid var(--app-line);background:#fff;border-radius:10px;padding:10px 12px;display:grid;gap:6px;align-content:start}
+.importsrc .src b{font-size:13.5px}
+.importsrc .src p{font-size:12px;color:var(--app-ink-2)}
+.linked{color:var(--app-accent);font-size:12px;font-weight:600}
+.unlinked{color:var(--app-amber);font-size:12px;font-weight:600}
+.colmap select{font-size:12px!important;padding:2px 4px!important}
+
+/* 체크 원 */
+.circ{width:24px;height:24px;border-radius:50%;border:1.5px solid #C9D3D1;background:#fff;cursor:pointer;display:inline-grid;place-items:center;font-size:13px;font-weight:700;color:transparent;padding:0}
+.circ.on.blue{background:var(--app-blue);border-color:var(--app-blue);color:#fff}
+.circ.on.red{background:var(--app-red-soft);border-color:var(--app-red);color:var(--app-red)}
+.circ.new{box-shadow:0 0 0 3px var(--app-amber-soft)}
+.reason{width:130px}
+
+/* 감독 방식 */
+.switch{position:relative;width:46px;height:26px;flex:none}
+.switch input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
+.switch span{position:absolute;inset:0;border-radius:13px;background:#C9D3D1;transition:background .2s}
+.switch span::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked+span{background:var(--app-accent)}
+.switch input:checked+span::after{transform:translateX(20px)}
+.switch input:focus-visible+span{outline:2px solid var(--app-accent);outline-offset:2px}
+fieldset.set{border:0;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+fieldset.set:disabled{opacity:.45}
+fieldset.set .box{border:1px solid var(--app-line);border-radius:10px;padding:10px 12px;display:grid;gap:8px;background:#fff}
+fieldset.set label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13.5px}
+.single td button{width:100%;border:0;background:none;cursor:pointer;padding:6px;font-size:12.5px;font-weight:600}
+.single td.on{background:var(--app-accent-soft)}
+.single td.on button{color:var(--app-accent)}
+.single th button{border:0;background:none;font:inherit;color:inherit;cursor:pointer;text-decoration:underline dotted}
+.calc{font-size:13px;font-variant-numeric:tabular-nums;line-height:1.7;background:var(--app-fill);border-radius:8px;padding:8px 10px;white-space:pre-wrap}
+
+/* 배정표 */
+.seg2{display:inline-flex;background:var(--app-fill);border-radius:9px;padding:3px;gap:2px}
+.seg2 button{border:0;background:none;border-radius:7px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--app-ink-2)}
+.seg2 button[aria-pressed=true]{background:#fff;color:var(--app-accent);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.stats{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--app-ink-2)}
+.stats b{color:var(--app-ink);font-size:14px}
+.badge-opt{background:#EAF1FD;color:var(--app-blue);border-radius:999px;padding:1px 9px;font-size:12px;font-weight:600}
+.mx td.c{cursor:pointer;min-width:70px;font-weight:600;transition:background .12s}
+.mx td.c.free{color:var(--app-ink-3);font-weight:400}
+.mx td.c.blocked{color:var(--app-ink-3);font-weight:400;font-size:12px;background:#F6F7F7;cursor:not-allowed}
+.mx td.c.hall{color:var(--app-purple)}
+.mx td.c.sel{background:var(--app-accent);color:#fff}
+.mx td.c.can{background:var(--app-accent-soft);outline:1.5px dashed var(--app-accent);outline-offset:-3px}
+.mx td.c.cannot{background:var(--app-red-soft);color:var(--app-red)}
+.mx td.c.changed{box-shadow:inset 0 -3px 0 var(--app-amber)}
+.mx td.score{font-weight:700}
+.mx td.score small{color:var(--app-ink-3);font-weight:500;margin-left:3px}
+.mx td.rc{cursor:pointer;min-width:84px;font-weight:600}
+.mx td.rc.empty{background:var(--app-red-soft);color:var(--app-red)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--app-ink-2)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:4px}
+.pendbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:var(--app-amber-soft);border-radius:8px;padding:6px 10px;font-size:13px}
+.pendbar b{color:var(--app-amber)}
+.cand{display:grid;gap:4px;max-height:260px;overflow:auto}
+.cand button{display:flex;justify-content:space-between;gap:8px;border:1px solid var(--app-line);background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;text-align:left;font-size:13px}
+.cand button:hover:not(:disabled){border-color:var(--app-accent)}
+.cand button:disabled{cursor:not-allowed;background:#F6F7F7;color:var(--app-ink-3)}
+.cand button small{color:var(--app-ink-3)}
+.cand button.ok small{color:var(--app-accent)}
+.cand button.cur{border-color:var(--app-accent);background:var(--app-accent-soft)}
+
+/* 화면 구성 핀 */
+.shell{display:grid;grid-template-columns:170px minmax(0,1fr);min-height:300px;border-radius:0}
+.shell .sd{background:var(--app-side);border-right:1px solid var(--app-line);padding:12px;display:grid;gap:6px;align-content:start;font-size:13px}
+.shell .sd .it{padding:4px 8px;border-radius:6px;color:var(--app-ink-2)}
+.shell .sd .it.sub{padding-left:22px;font-size:12.5px}
+.shell .sd .it.on{background:var(--app-accent-soft);color:var(--app-accent);font-weight:600}
+.shell .mn{display:grid;grid-template-rows:auto 1fr;min-width:0}
+.shell .tb{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--app-line);font-size:12.5px;background:#fff}
+.shell .ct{padding:14px;display:grid;gap:8px;align-content:start}
+.pin{width:22px;height:22px;border-radius:50%;background:var(--app-purple);color:#fff;font-size:11.5px;font-weight:700;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer;display:inline-grid;place-items:center;flex:none;padding:0}
+.pin[aria-pressed=true]{background:var(--app-ink)}
+.pinfo{font-size:13.5px;background:#fff;border:1px solid var(--app-line);border-radius:10px;padding:10px 12px;min-height:58px}
+.pinfo b{display:block;margin-bottom:2px}
+
+details.faq{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:0 16px}
+details.faq summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.faq summary::after{content:"+";color:var(--ink-3);font-weight:400}
+details.faq[open] summary::after{content:"−"}
+details.faq>div{padding-bottom:14px;display:grid;gap:8px;color:var(--ink-2);font-size:15px}
+.faqs{display:grid;gap:8px}
+footer.end{padding-block:40px;color:var(--ink-3);font-size:13px}
+mark{background:var(--warn-soft);color:inherit;border-radius:3px}
+
+@media (max-width:980px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:0;padding-inline:16px}
+  .toc{position:sticky;top:env(safe-area-inset-top,0px);height:auto;max-height:100vh;z-index:20;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--line);gap:12px}
+  .toc-toggle{display:inline-flex;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:4px 12px;cursor:pointer;font-size:14px}
+  .toc .rest{display:none}
+  .toc.open .rest{display:grid;gap:20px;max-height:70vh;overflow:auto;padding-bottom:12px}
+  .toc .topline{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  main{padding-block:40px 80px;gap:72px}
+}
+@media (min-width:981px){.toc .topline .toc-toggle{display:none}.toc .rest{display:grid;gap:24px}}
+@media (max-width:560px){
+  .shell{grid-template-columns:minmax(0,1fr)}.shell .sd{display:none}
+  .room-row{grid-template-columns:minmax(0,1fr)}
+  .flow{grid-template-columns:minmax(0,1fr);gap:16px}
+  .app{padding:12px}
+  .try-head{padding:12px 14px}
+}
+</style>
+
+<div class="wrap">
+<aside class="toc" id="toc">
+  <div class="topline">
+    <div class="brand"><span class="tg"></span><div><b>Oni 감독</b><small>사용 설명서</small></div></div>
+    <button class="toc-toggle" id="tocToggle" aria-expanded="false" aria-controls="tocRest">목차</button>
+  </div>
+  <div class="rest" id="tocRest">
+    <div class="progress"><div><b id="progTxt">0</b>/<span id="progAll">0</span> 단계 확인함</div><div class="bar"><i id="progBar"></i></div></div>
+    <input type="search" id="tocSearch" placeholder="찾기 (예: 맞교환, 컴시간)" aria-label="설명서에서 찾기">
+    <nav id="tocNav" aria-label="설명서 목차"></nav>
+    <div class="theme" role="group" aria-label="화면 테마">테마
+      <button data-theme-set="system" aria-pressed="true">자동</button><button data-theme-set="light" aria-pressed="false">밝게</button><button data-theme-set="dark" aria-pressed="false">어둡게</button>
+    </div>
+  </div>
+</aside>
+
+<main id="main">
+<header class="hero">
+  <div class="eyebrow">ONI 감독 · v1.3 구매자용 안내</div>
+  <h1>시험감독 배정, 처음부터 엑셀 출력까지</h1>
+  <p class="lede">이 설명서는 프로그램의 실제 메뉴 순서를 그대로 따라갑니다. 단계마다 무엇을 누르고 무엇을 확인해야 하는지 적었고, 그 아래 <b>직접 해보기</b> 화면에서 같은 조작을 연습할 수 있습니다. 연습 화면은 이 페이지 안에서만 동작하며 실제 고사 자료를 바꾸지 않습니다.</p>
+  <p class="meta">Windows 데스크톱 앱 · 배정 계산은 인터넷 없이 · 컴시간·엑셀·Google Sheets 불러오기 · 일반 / 정·부감독 모드</p>
+  <div class="flow" id="flow">
+    <a href="#rooms"><span class="where">시험 설정</span><b>① 학교·고사실</b><small>컴시간 학교 지정, 학급을 고사실로</small></a>
+    <a href="#schedule"><span class="where">시험 설정</span><b>② 시험 일정·과목</b><small>날짜·교시·과목, 반별 과목</small></a>
+    <a href="#import"><span class="where">교사 설정</span><b>③ 교사 명단</b><small>컴시간·엑셀에서 불러오기</small></a>
+    <a href="#teachers"><span class="where">교사 설정</span><b>④ 교사 조건</b><small>과목·담임·감독불가학급·역할</small></a>
+    <a href="#unavailable"><span class="where">교사 설정</span><b>⑤ 특별교사·감독불가</b><small>지정 교시, 출장·수업 교시</small></a>
+    <a href="#mode"><span class="where">시험 설정</span><b>⑥ 감독 방식</b><small>일반 / 정·부감독, 단독 고사실</small></a>
+    <a href="#run"><span class="where">배정표</span><b>⑦ 자동 배정·검토</b><small>결과·미배정·경고 확인</small></a>
+    <a href="#swap"><span class="where">배정표</span><b>⑧ 바꾸기·출력</b><small>맞교환, 반영, 엑셀 감독표</small></a>
+  </div>
+</header>
+
+<!-- ===================== 시작하기 ===================== -->
+<section class="ch" id="install" data-group="시작하기" data-title="설치하기">
+  <div class="ch-head"><div class="path"><span class="num">0-1</span> 시작하기</div><h2>설치하기</h2></div>
+  <div class="ch-body">
+    <ol class="steps">
+      <li><div>구매 후 받은 설치 파일(<code>.exe</code>)을 두 번 눌러 설치합니다. Windows에서 “PC 보호” 창이 뜨면 <span class="ui">추가 정보</span> → <span class="ui">실행</span>을 누릅니다.</div></li>
+      <li><div>설치가 끝나면 바탕화면이나 시작 메뉴의 <b>Oni 감독</b>을 실행합니다.</div></li>
+    </ol>
+    <div class="note"><b>알아두기</b><p>배정 계산은 인터넷 없이 됩니다. 컴시간·Google Sheets에서 불러올 때만 인터넷이 필요합니다.</p></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="install" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="layout" data-group="시작하기" data-title="화면 구성과 저장 규칙">
+  <div class="ch-head"><div class="path"><span class="num">0-2</span> 시작하기</div><h2>화면 구성과 저장 규칙</h2></div>
+  <div class="ch-body">
+    <p class="why">왼쪽 메뉴는 작업 순서대로 놓여 있습니다. 위에서 아래로 내려가며 채우면 배정에 필요한 정보가 모두 갖춰집니다. 아래 화면의 보라색 번호를 눌러 각 부분의 역할을 확인하세요.</p>
+  </div>
+  <div class="try" id="t-shell">
+    <div class="try-head"><span class="lbl">화면 둘러보기</span><span class="goal">번호를 눌러 설명 보기</span></div>
+    <div class="app" style="padding:0;gap:0">
+      <div class="shell">
+        <div class="sd">
+          <div class="row" style="gap:6px;margin-bottom:6px"><span class="pin" data-pin="1" role="button" tabindex="0">1</span><b>Oni 감독</b></div>
+          <div class="row"><button class="btn" style="width:100%;justify-content:flex-start">＋ 새 고사</button><span class="pin" data-pin="2" role="button" tabindex="0">2</span></div>
+          <div class="it">시험 설정</div><div class="it sub on">일정·고사실</div><div class="it sub">감독 방식·배정 기준</div>
+          <div class="it">교사 설정</div><div class="it sub">교사 명단</div><div class="it sub">특별교사 감독 설정</div><div class="it sub">감독불가 교사 설정</div>
+          <div class="it">배정표</div><div class="it">기록</div>
+        </div>
+        <div class="mn">
+          <div class="tb">
+            <span class="row" style="gap:6px">2026학년도 2학기 중간고사 › <b>시험 설정</b><span class="pin" data-pin="3" role="button" tabindex="0">3</span></span>
+            <span class="row" style="gap:10px"><span style="color:var(--app-amber)">● 저장 안 됨</span><button class="btn soft" style="padding:2px 10px">저장</button><span class="pin" data-pin="4" role="button" tabindex="0">4</span>
+            <span>↶ 되돌리기 ↷ 다시 실행</span><span class="pin" data-pin="5" role="button" tabindex="0">5</span>
+            <span>⇪ ⇩</span><span class="pin" data-pin="6" role="button" tabindex="0">6</span></span>
+          </div>
+          <div class="ct">
+            <h5>시험 설정</h5>
+            <div class="row" style="gap:16px;border-bottom:1px solid var(--app-line);font-size:13px"><span style="border-bottom:2px solid var(--app-accent);color:var(--app-accent);padding-bottom:4px;font-weight:600">일정·고사실</span><span>감독 방식·배정 기준</span><span class="pin" data-pin="7" role="button" tabindex="0">7</span></div>
+            <div class="pinfo" id="pinInfo" aria-live="polite"><b>번호를 눌러 보세요</b>각 부분이 하는 일을 이곳에 보여 줍니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ch-body">
+    <h3>저장은 직접 합니다</h3>
+    <ul class="dots">
+      <li>입력을 바꾸면 위쪽에 <b>저장 안 됨</b>과 <span class="ui">저장</span> 버튼이 나타납니다. <kbd>Ctrl</kbd>+<kbd>S</kbd>로도 저장됩니다.</li>
+      <li>저장하지 않고 다른 메뉴로 가거나 앱을 닫으면 <b>저장하고 이동 / 저장하지 않고 이동 / 취소</b>를 묻습니다. 저장하지 않으면 마지막 저장 상태로 돌아갑니다.</li>
+      <li>각 화면 아래의 <span class="ui p">저장 및 다음 단계</span>, 자동 배정 결과, 배정 조정의 <span class="ui p">변경사항 반영</span>은 누르는 즉시 저장됩니다.</li>
+      <li>실수했으면 <span class="ui">되돌리기</span>(<kbd>Ctrl</kbd>+<kbd>Z</kbd>) 또는 <span class="ui">다시 실행</span>(<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>)을 누릅니다. 입력칸 안에서는 그 칸의 글자 되돌리기가 먼저 적용됩니다.</li>
+    </ul>
+    <div class="tip"><b>처음이라면</b><p><span class="ui">시험 설정</span> 화면의 <span class="ui">예시 고사 둘러보기</span>를 누르면 교사 24명, 고사실 7실, 3일짜리 예시 고사가 열립니다. 메뉴를 하나씩 눌러 보고 <span class="ui p">자동 배정</span>까지 실행해 본 다음, <span class="ui">새 고사</span>로 실제 작업을 시작하세요.</p></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="layout" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<!-- ===================== 시험 설정 ===================== -->
+<section class="ch" id="newexam" data-group="시험 설정" data-title="새 고사와 고사 이름">
+  <div class="ch-head"><div class="path"><span class="num">1</span> 시험 설정 › <b>일정·고사실</b></div><h2>새 고사 만들기와 고사 이름</h2></div>
+  <div class="ch-body">
+    <ol class="steps">
+      <li><div>왼쪽 위 <span class="ui">＋ 새 고사</span>를 누르고 확인합니다. 지금 열려 있던 고사는 저장된 뒤 <b>기록</b>에 남습니다.</div></li>
+      <li><div><b>고사 이름 설정</b> 칸에 이름을 적습니다. 예: <i>2026학년도 2학기 기말고사</i>. 이 이름은 상단 경로, 기록 목록, 엑셀 파일 제목에 쓰입니다.</div></li>
+    </ol>
+    <div class="note"><b>지난 학기 자료를 다시 쓰려면</b><p><span class="ui">기록</span>에서 지난 고사를 열면 교사 명단과 고사실이 그대로 남아 있습니다. 다만 그 고사 자체를 고치게 되므로, 새 학기용으로는 지난 고사를 <b>고사 파일 내보내기</b>(JSON)로 저장한 뒤 <b>고사 파일 가져오기</b>로 새 고사로 불러와 날짜·과목만 바꾸는 방법을 권합니다. 자세한 방법은 <a href="#records">14장</a>에 있습니다.</p></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="newexam" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="school" data-group="시험 설정" data-title="학교 설정 (컴시간)">
+  <div class="ch-head"><div class="path"><span class="num">2</span> 시험 설정 › <b>일정·고사실</b> › 학교 설정</div><h2>학교 설정: 컴시간에서 학교 지정하기</h2></div>
+  <div class="ch-body">
+    <p class="why">학교를 한 번 정해 두면 두 가지가 편해집니다. ① 학년별 학급을 고사실로 한 번에 불러오고, ② 교사 설정의 <b>시간표에서 불러오기</b>가 이 학교 시간표를 바로 엽니다. 학교를 정하지 않아도 모든 기능은 직접 입력으로 쓸 수 있습니다.</p>
+    <ol class="steps">
+      <li><div><b>학교 설정</b> 칸에 학교 이름을 2글자 이상 적고 <span class="ui">검색</span>을 누릅니다. 결과가 없으면 “중앙중”처럼 이름을 줄여 다시 찾습니다.</div></li>
+      <li><div>목록에서 우리 학교(지역 이름으로 구분)를 누릅니다. 칸에 학교 이름과 <span class="ui">학교 변경</span> 버튼이 보이면 지정된 것입니다.</div></li>
+      <li><div><span class="ui p">학급을 고사실로 불러오기</span>를 누르면 컴시간의 학년별 학급 수만큼 <code>1-1, 1-2 …</code> 고사실이 추가됩니다. 이미 있는 학급은 건너뜁니다.</div></li>
+    </ol>
+    <div class="warn"><b>주의</b><p>컴시간에 등록된 학급 수가 실제와 다르거나(특수학급, 순회학급 등) 학급 수를 찾지 못하면 <a href="#rooms">고사실 관리</a>에서 직접 추가·삭제하세요. 컴시간 연결은 인터넷이 필요합니다.</p></div>
+  </div>
+  <div class="try" id="t-school">
+    <div class="try-head"><span class="lbl">직접 해보기 · 학교 검색</span><span class="goal">“한빛”을 검색해 학교를 고르고 학급을 불러오세요</span><button class="reset" data-reset="school">처음으로</button></div>
+    <div class="app">
+      <div><h5>학교 설정</h5><p class="desc">컴시간에서 학교를 정하면 학급을 고사실로 불러오고, 교사 설정에서 시간표를 바로 불러옵니다.</p></div>
+      <div id="schoolBox"></div>
+      <div class="toast" id="schoolToast" aria-live="polite"></div>
+      <div class="panel" id="schoolRooms" style="padding:4px 0"></div>
+    </div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="school" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="rooms" data-group="시험 설정" data-title="고사실 관리">
+  <div class="ch-head"><div class="path"><span class="num">3</span> 시험 설정 › <b>일정·고사실</b> › 고사실 관리</div><h2>고사실 관리: 학급, 복도, 특별실</h2></div>
+  <div class="ch-body">
+    <p class="why">고사실은 감독 자리가 생기는 장소입니다. 학급 고사실은 시험 일정의 학년 칸과 연결되고, 복도 감독 구역은 시험이 있는 모든 교시에 감독 자리를 하나씩 만듭니다.</p>
+    <ol class="steps">
+      <li><div><b>학년별 고사실</b>: 학년 줄의 <span class="ui">＋ 추가</span>는 다음 번호 학급을 하나 더합니다. 오른쪽 숫자칸에 학급 수(예: 8)를 적고 <span class="ui">한 번에 추가</span>를 누르면 1~8반까지 비어 있는 번호를 채웁니다.</div></li>
+      <li><div><b>이름 바꾸기</b>: 학급 칩(<span class="chip sub" style="cursor:default">1-1</span>)을 누르면 이름 변경 창이 열립니다. “1-1(시청각실)”처럼 바꿔도 내부 연결은 그대로 유지됩니다.</div></li>
+      <li><div><b>삭제</b>: 칩에 마우스를 올리면 오른쪽 위에 작은 ×가 나타납니다. 삭제하면 그 고사실이 쓰인 과목의 적용 고사실에서도 빠집니다.</div></li>
+      <li><div><b>복도·특별실</b>: <span class="ui">복도 감독 구역 ＋ 추가</span>로 “본관 2층 복도”처럼 복도 감독 자리를 만듭니다. 특별실은 학급이 아닌 시험 장소(예: 별도 고사실)를 따로 관리할 때 씁니다.</div></li>
+    </ol>
+    <div class="note"><b>복도 감독이 생기지 않는 경우</b><p>① 그 교시의 모든 과목이 <b>자습</b>일 때, ② 감독 방식이 <b>정/부감독 모드</b>일 때는 복도 감독 자리를 만들지 않습니다. 고사실 순서는 항상 학급(학년 → 반 번호) → 복도 → 특별실 순서로 정렬됩니다.</p></div>
+  </div>
+  <div class="try" id="t-rooms">
+    <div class="try-head"><span class="lbl">직접 해보기 · 고사실 관리</span><span class="goal">2학년을 5개 학급으로 채우고, 칩 하나의 이름을 바꿔 보세요</span><button class="reset" data-reset="rooms">처음으로</button></div>
+    <div class="app">
+      <div class="row" style="justify-content:space-between"><h5>고사실 관리 <span class="desc" id="roomCount"></span></h5></div>
+      <div><b style="font-size:13px">학년별 고사실</b> <span class="desc">학급을 추가하고, 이름을 누르면 수정할 수 있습니다.</span></div>
+      <div class="panel" id="roomsBox"></div>
+      <div><b style="font-size:13px">복도·특별실</b> <span class="desc">시험 과목이 있는 교시에 배치합니다. 자습에는 복도 감독을 배치하지 않습니다.</span></div>
+      <div class="panel" id="hallBox"></div>
+      <div class="stage" id="roomStage" style="min-height:0"></div>
+    </div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="rooms" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="schedule" data-group="시험 설정" data-title="시험 일정과 과목 입력">
+  <div class="ch-head"><div class="path"><span class="num">4</span> 시험 설정 › <b>일정·고사실</b> › 시험 일정</div><h2>시험 일정과 과목 입력</h2></div>
+  <div class="ch-body">
+    <ol class="steps">
+      <li><div><span class="ui">＋ 시험일 추가</span>를 누르면 달력이 열립니다. 시험 날짜를 여러 개 눌러 고른 뒤 <span class="ui p">n일 추가</span>를 누릅니다. 이미 등록된 날은 점으로 표시됩니다.</div></li>
+      <li><div>날짜 카드마다 오른쪽 위 <b>교시 수</b>를 <span class="ui">−</span> <span class="ui">＋</span>로 맞춥니다. 날짜를 잘못 골랐으면 카드의 날짜(달력 아이콘)를 눌러 바꾸고, 휴지통으로 그날을 지웁니다.</div></li>
+      <li><div>교시×학년 칸에 과목명을 바로 적습니다. <kbd>Enter</kbd>는 아래 칸, 방향키는 상하좌우 칸으로 이동합니다(좌우 이동은 글자 끝에서, 옆 날짜 카드로도 이어짐). <kbd>Esc</kbd>는 입력을 취소합니다.</div></li>
+      <li><div>시험이 없는 칸은 비워 둡니다. 비운 칸에는 감독 자리가 생기지 않습니다. 학생이 자습하는 교시는 <b>자습</b>이라고 적습니다.</div></li>
+    </ol>
+    <div class="note"><b>과목명이 중요한 이유</b><p>프로그램은 칸에 적힌 과목명과 교사의 <b>담당과목</b>을 글자 그대로 비교해 “자기 과목 시험 시간에는 감독하지 않는다”를 지킵니다. 일정에 “수학Ⅰ”, 교사 담당과목에 “수학”으로 적으면 다른 과목으로 봅니다. 같은 표기를 쓰세요.</p></div>
+  </div>
+  <div class="try" id="t-sched">
+    <div class="try-head"><span class="lbl">직접 해보기 · 시험 일정</span><span class="goal">빈 칸에 과목을 적고 Enter·방향키로 이동해 보세요. 아래 요약이 바로 바뀝니다</span><button class="reset" data-reset="sched">처음으로</button></div>
+    <div class="app">
+      <div class="stage" id="schedStage"></div>
+    </div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="schedule" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="multi" data-group="시험 설정" data-title="복수 과목·반별 과목">
+  <div class="ch-head"><div class="path"><span class="num">5</span> 시험 설정 › <b>일정·고사실</b> › 칸의 ＋ 버튼</div><h2>한 교시에 과목이 여러 개일 때</h2></div>
+  <div class="ch-body">
+    <p class="why">고등학교 선택과목이나 이동수업처럼 같은 교시에 과목이 둘 이상이면 아래 세 가지 중 맞는 방법을 고릅니다. 모두 <b>그 과목 담당 교사를 그 교시 감독에서 빼기</b> 위한 설정입니다.</p>
+    <div class="two">
+      <div class="card"><span class="case-tag">경우 A</span><h4>한 반 학생이 두 과목을 함께 본다</h4><p>예: 3학년 2교시에 모든 반이 <b>물리와 화학</b>을 이어서 응시.</p><p><b>방법</b>: 칸에 <code>물리, 화학</code> 또는 <code>물리 / 화학</code>처럼 쉼표나 빗금으로 적습니다. 물리·화학 담당 교사 모두 그 교시 감독에서 빠집니다.</p></div>
+      <div class="card"><span class="case-tag">경우 B</span><h4>반마다 다른 과목을 본다 (반별 과목)</h4><p>예: 3-1·3-2는 <b>일본어</b>, 3-3·3-4는 <b>중국어</b>.</p><p><b>방법</b>: 칸 오른쪽 위 <span class="ui">＋</span> → <b>추가 과목·고사실 설정</b> 창에서 <span class="ui">과목 추가</span>로 과목을 더하고, 과목마다 적용 고사실을 나눠 고릅니다. 한 반은 한 과목에만 속합니다.</p></div>
+      <div class="card"><span class="case-tag">경우 C</span><h4>일부 반만 시험을 본다</h4><p>예: 2학년 3교시에 2-1~2-3반만 시험.</p><p><b>방법</b>: ＋ 창에서 과목 하나만 두고 시험 보는 고사실만 남깁니다. 칸에 <span style="color:var(--warn);font-weight:700">3/5실</span>처럼 주황 표시가 생기고, 빠진 반에는 감독 자리가 생기지 않습니다.</p></div>
+    </div>
+    <h3>추가 과목·고사실 설정 창 사용법</h3>
+    <ol class="steps">
+      <li><div>칸에 마우스를 올리면 오른쪽 위에 작은 <span class="ui">＋</span>가 보입니다. 누르면 “날짜 · n교시 · n학년” 창이 열립니다.</div></li>
+      <li><div>첫 과목의 이름을 확인하고, <b>적용 고사실</b>에서 그 과목을 보는 반만 남깁니다. <span class="ui">전체 선택</span>은 이 과목에 모든 반을 주고 다른 과목에서는 뺍니다.</div></li>
+      <li><div><span class="ui">＋ 과목 추가</span>를 누르면 아직 어느 과목에도 속하지 않은 반을 가진 새 과목이 생깁니다. 이름을 적고 반을 조정합니다. 다른 과목에서 반을 누르면 원래 과목에서 자동으로 빠집니다.</div></li>
+      <li><div><span class="ui p">적용완료</span>를 눌러야 반영됩니다. <span class="ui">취소</span>를 누르면 창에서 바꾼 내용은 버려집니다.</div></li>
+    </ol>
+    <div class="tip"><b>경우 A와 B를 함께</b><p>반별 과목의 과목명 칸에도 쉼표를 쓸 수 있습니다. 예: 3-1·3-2는 <code>물리, 화학</code>, 3-3·3-4는 <code>생명과학, 지구과학</code>. 이때 네 과목 담당 교사 모두가 그 교시 감독에서 빠집니다. 감독 제외는 반이 아니라 <b>교시 단위</b>로 적용되기 때문입니다.</p></div>
+  </div>
+  <div class="try" id="t-multi">
+    <div class="try-head"><span class="lbl">직접 해보기 · 반별 과목</span><span class="goal">3학년 2교시를 일본어(3-1, 3-2) / 중국어(3-3, 3-4)로 나눠 보세요</span><button class="reset" data-reset="multi">처음으로</button></div>
+    <div class="app">
+      <div class="stage" id="multiStage"></div>
+    </div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="multi" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<!-- ===================== 교사 설정 ===================== -->
+<section class="ch" id="import" data-group="교사 설정" data-title="교사 명단 가져오기">
+  <div class="ch-head"><div class="path"><span class="num">6</span> 교사 설정 › <b>교사 명단</b> › 명단 가져오기</div><h2>교사 명단 가져오기: 컴시간 · Google Sheets · 엑셀</h2></div>
+  <div class="ch-body">
+    <p class="why"><span class="ui">명단 가져오기</span>를 누르면 세 가지 방법이 한 창에 나옵니다. 어느 방법이든 <b>미리보기에서 확인한 뒤 “n명 추가”</b>를 눌러야 명단에 들어갑니다. 이미 있는 교사는 지우지 않고 뒤에 더합니다.</p>
+    <h3>방법 1 · 컴시간에서 불러오기</h3>
+    <ol class="steps">
+      <li><div><b>컴시간 학교 검색</b>에 학교 이름을 적고 <span class="ui">학교 검색</span> → 우리 학교를 누릅니다.</div></li>
+      <li><div>공개 시간표에서 교사 이름, 시간표에 나온 과목, 담임 학급을 읽어 미리보기에 보여 줍니다. 담임 학급이 고사실에 있으면 <span style="color:var(--accent-ink);font-weight:600">고사실 연결됨</span>, 없으면 <span style="color:var(--warn);font-weight:600">미연결 · 확인 필요</span>로 표시됩니다.</div></li>
+      <li><div>컴시간은 이름을 <b>김수*</b>처럼 가려서 공개합니다. 미리보기 칸에서 바로 고치거나, 추가한 뒤 <span class="ui">이름·과목 일괄 편집</span>에서 엑셀 열을 붙여넣어 한 번에 고칩니다.</div></li>
+      <li><div>담당과목은 시간표에 나온 과목 약칭(예: <i>통사</i>)일 수 있습니다. 시험 일정의 과목명과 같게 고쳐 주세요(예: <i>통합사회</i>).</div></li>
+      <li><div>가져올 교사의 체크를 확인하고 <span class="ui p">n명 추가</span>를 누릅니다.</div></li>
+    </ol>
+    <div class="warn"><b>컴시간 명단에서 꼭 확인할 것</b><p>같은 가림 이름(예: 이주* 두 명)도 서로 다른 교사로 따로 들어옵니다. 담임이 두 학급으로 잡힌 교사는 메모에 “담임학급 중복 확인 필요”가 남습니다. 강사·비교과 교사는 시간표에 없으면 명단에도 없으니 <span class="ui">＋ 교사 추가</span>로 더하세요.</p></div>
+    <h3>방법 2 · Google Sheets 링크</h3>
+    <ol class="steps">
+      <li><div>시트에서 <b>공유 → 링크가 있는 모든 사용자(뷰어)</b>로 바꿉니다.</div></li>
+      <li><div>주소창의 링크(<code>https://docs.google.com/spreadsheets/d/…</code>)를 붙여넣고 <span class="ui p">불러오기</span>를 누릅니다.</div></li>
+    </ol>
+    <h3>방법 3 · 엑셀·CSV 파일</h3>
+    <ol class="steps">
+      <li><div><span class="ui">엑셀·CSV 파일 선택</span>으로 <code>.xlsx</code>, <code>.csv</code>, <code>.tsv</code> 파일을 고릅니다. 시트가 여럿이면 <b>시트</b> 목록에서 명단 시트를 고릅니다.</div></li>
+    </ol>
+    <h3>열 연결 (방법 2·3 공통)</h3>
+    <p>프로그램이 제목 행을 자동으로 찾고 열 이름(교사명, 담당과목, 담임, 감독불가학급, 역할, 메모)을 짐작해 연결합니다. 미리보기 표의 <b>A열, B열 …</b> 위 목록에서 각 열이 무엇인지 바로잡을 수 있습니다. 한 항목은 한 열에만 연결됩니다. <b>교사명</b> 열이 연결되어야 추가 버튼이 켜집니다.</p>
+    <div class="tip"><b>엑셀 명단 예시</b>
+      <div class="tscroll"><table class="ref" style="margin-top:6px"><thead><tr><th>교사명</th><th>담당과목</th><th>담임</th><th>감독불가학급</th><th>역할</th><th>메모</th></tr></thead>
+      <tbody><tr><td>김민서</td><td>국어, 문학</td><td>1-1</td><td></td><td>일반 교사</td><td></td></tr><tr><td>박지우</td><td>영어</td><td></td><td>2-3</td><td>시간강사</td><td>화·목 출근</td></tr><tr><td>한소윤</td><td></td><td></td><td></td><td>감독 제외</td><td>병가</td></tr></tbody></table></div>
+      <p>여러 과목은 쉼표로 구분합니다. 담임·감독불가학급은 고사실 이름과 같게 적습니다. 고사실에 없는 학급이나 모르는 역할 이름이 있어도 불러오며, 해당 칸은 비우고 명단에 <span class="review" style="cursor:default">수정 필요</span> 배지를 띄웁니다. 이름이 빈 행만 제외됩니다.</p></div>
+  </div>
+  <div class="try" id="t-import">
+    <div class="try-head"><span class="lbl">직접 해보기 · 컴시간 명단 가져오기</span><span class="goal">학교를 검색해 명단을 불러오고, 가려진 이름을 고친 뒤 추가하세요</span><button class="reset" data-reset="import">처음으로</button></div>
+    <div class="app"><div class="stage" id="importStage"></div></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="import" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="teachers" data-group="교사 설정" data-title="교사 기본 정보와 역할">
+  <div class="ch-head"><div class="path"><span class="num">7</span> 교사 설정 › <b>교사 명단</b></div><h2>교사 기본 정보: 과목 · 담임 · 감독불가학급 · 역할</h2></div>
+  <div class="ch-body">
+    <p class="why">교사 한 줄에 적힌 정보가 곧 배정 금지 조건입니다. 칸을 누르면 선택창이 열립니다.</p>
+    <div class="tscroll"><table class="ref">
+      <thead><tr><th>칸</th><th>선택 방식</th><th>배정에 미치는 영향</th></tr></thead>
+      <tbody>
+        <tr><td><b>담당과목</b></td><td>여러 개 선택, 목록에 없으면 <i>새 과목 직접 입력</i></td><td>그 과목 시험이 있는 <b>교시 전체</b>에서 감독 제외</td></tr>
+        <tr><td><b>담임</b></td><td>학년 탭에서 학급 하나 (다시 누르면 해제)</td><td>자기 반 고사실 감독 금지 (다른 고사실은 가능)</td></tr>
+        <tr><td><b>감독불가학급</b></td><td>여러 학급 선택</td><td>고른 고사실 감독 금지 (예: 자녀가 있는 반, 부담임 반)</td></tr>
+        <tr><td><b>비고 / 역할</b></td><td>역할 목록 + 메모</td><td>아래 역할 표 참고</td></tr>
+      </tbody></table></div>
+    <h3>역할 7가지</h3>
+    <div class="tscroll"><table class="ref">
+      <thead><tr><th>역할</th><th>배정 방식</th><th>기본 배치 자리</th></tr></thead>
+      <tbody>
+        <tr><td><span class="role normal">일반 교사</span></td><td>감독불가로 체크하지 않은 모든 교시에서 점수가 고르게 되도록 자동 배정</td><td>교과·복도 모두</td></tr>
+        <tr><td><span class="role sp">지정배치</span></td><td rowspan="5">특별교사. <b>체크한 교시에만, 체크한 교시마다 반드시</b> 감독. 횟수 상한·점수 균등 계산에서 빠짐. <a href="#special">8장</a>에서 교시 체크</td><td>교과·복도 모두</td></tr>
+        <tr><td><span class="role sp">시간강사</span></td><td>복도 우선</td></tr>
+        <tr><td><span class="role sp">비교과</span></td><td>복도 우선</td></tr>
+        <tr><td><span class="role sp">순회</span></td><td>교과·복도 모두</td></tr>
+        <tr><td><span class="role sp">복도 전담</span></td><td>복도만 (정/부 모드는 부감독만)</td></tr>
+        <tr><td><span class="role ex">감독 제외</span></td><td>배정하지 않음 (휴직, 병가 등)</td><td>—</td></tr>
+      </tbody></table></div>
+    <h3>그 밖의 버튼</h3>
+    <ul class="dots">
+      <li><span class="ui">이름·과목 일괄 편집</span>: 교사명·담당과목 두 열을 표처럼 고칩니다. 엑셀에서 복사한 열을 붙여넣으면 커서가 있는 칸부터 아래로 채워집니다. 컴시간의 가려진 이름을 고칠 때 가장 빠릅니다.</li>
+      <li><span class="ui">＋ 교사 추가</span>: 빈 줄을 하나 더합니다. 줄 끝의 ×는 그 교사를 지웁니다.</li>
+      <li><span class="ui">전체 삭제</span>: 명단과 가능 시간 설정을 모두 지웁니다(확인 창이 뜹니다).</li>
+      <li><span class="review" style="cursor:default">수정 필요</span> 배지: 가져오기에서 확인이 필요했던 내용입니다. 해당 칸을 고치면 사라지고, 배지를 눌러 직접 지울 수도 있습니다.</li>
+    </ul>
+    <div class="warn"><b>배정 결과가 이미 있을 때</b><p>교사 정보나 일정을 바꾸면 기존 배정 결과는 재검증 대상이 됩니다. 배정표를 열면 새 조건에 어긋나는 배정이 해제되고 그 수를 알려 줍니다. 조건을 크게 바꿨다면 자동 배정을 다시 실행하세요.</p></div>
+  </div>
+  <div class="try" id="t-teach">
+    <div class="try-head"><span class="lbl">직접 해보기 · 교사 명단</span><span class="goal">칸을 눌러 과목·담임·감독불가학급·역할을 바꿔 보세요</span><button class="reset" data-reset="teach">처음으로</button></div>
+    <div class="app"><div class="stage" id="teachStage"></div></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="teachers" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="special" data-group="교사 설정" data-title="특별교사 감독 설정">
+  <div class="ch-head"><div class="path"><span class="num">8</span> 교사 설정 › <b>특별교사 감독 설정</b></div><h2>특별교사 감독 설정: 반드시 감독할 교시 지정</h2></div>
+  <div class="ch-body">
+    <p class="why">이 화면에는 역할이 지정배치·시간강사·비교과·순회·복도 전담인 교사만 나옵니다. 여기서 <b>체크(파란 ✓)는 “이 교시에 반드시 감독한다”</b>는 뜻입니다. 체크하지 않은 교시에는 배정되지 않습니다.</p>
+    <ol class="steps">
+      <li><div>출근하는 날, 감독을 맡을 교시의 원을 눌러 파란 ✓로 만듭니다. 위쪽 날짜 목록으로 하루씩 좁혀 볼 수 있습니다.</div></li>
+      <li><div><b>배치 자리</b>를 고릅니다. 일반 모드: 복도 우선 / 교과 우선 / 교과·복도 모두 / 복도만. 정/부 모드: 부감독 우선 / 정감독 우선 / 정·부 모두 / 부감독만.</div></li>
+      <li><div><span class="ui">시간표에서 불러오기</span>를 쓰면 시험 시간에 수업이 잡힌 특별교사의 교시를 감독 가능으로 체크해 줍니다(기존 체크는 유지).</div></li>
+      <li><div><span class="ui p">저장 및 다음 단계</span>를 누릅니다.</div></li>
+    </ol>
+    <div class="note"><b>“우선”과 “만”의 차이</b><p><b>복도 우선</b>은 같은 교시 복도가 다 찼거나 교실 자리가 비면 교실에도 들어갑니다. <b>복도만</b>은 교실에 절대 들어가지 않으며, 복도 자리가 없으면 <b>지정배치 미충족</b> 경고를 남깁니다. 단, 자습 교시에는 복도 자리가 없으므로 교실 감독을 합니다.</p></div>
+    <div class="warn"><b>자주 하는 실수</b><p>역할만 시간강사로 바꾸고 이 화면에서 체크를 하지 않으면 그 교사는 한 번도 배정되지 않습니다. 배정표의 검증 내역에 “지정 교시가 없어 감독에 배정되지 않습니다”가 나옵니다.</p></div>
+  </div>
+  <div class="try" id="t-special">
+    <div class="try-head"><span class="lbl">직접 해보기 · 특별교사</span><span class="goal">박지우(시간강사)가 19일 1·2교시를 반드시 감독하도록 체크하세요</span><button class="reset" data-reset="special">처음으로</button></div>
+    <div class="app"><div class="stage" id="specialStage"></div></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="special" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="unavailable" data-group="교사 설정" data-title="감독불가 교사 설정">
+  <div class="ch-head"><div class="path"><span class="num">9</span> 교사 설정 › <b>감독불가 교사 설정</b></div><h2>감독불가 교사 설정과 시간표에서 불러오기</h2></div>
+  <div class="ch-body">
+    <p class="why">이 화면에는 일반 교사만 나옵니다. 여기서 <b>체크(붉은 −)는 “이 교시에는 감독할 수 없다”</b>는 뜻입니다. 체크하지 않은 교시는 모두 감독 가능으로 보고 고르게 배정합니다.</p>
+    <ol class="steps">
+      <li><div>출장, 육아시간, 연수, 시험 시간과 겹치는 수업 등 감독할 수 없는 교시의 원을 누릅니다.</div></li>
+      <li><div>오른쪽 <b>사유</b> 칸에 이유를 적습니다. 사유는 배정표와 엑셀 교사별 표의 빈칸에 표시됩니다.</div></li>
+      <li><div>한 교사의 체크를 모두 지우려면 줄 끝 <span class="ui">초기화</span>를 누릅니다.</div></li>
+    </ol>
+    <h3>시간표에서 불러오기</h3>
+    <p>3학년 시험 중에 1·2학년 수업을 하는 학교처럼, 시험 시간에 수업이 있는 교사를 한꺼번에 감독불가로 체크하는 기능입니다.</p>
+    <ol class="steps">
+      <li><div><span class="ui">시간표에서 불러오기</span>를 누릅니다. 학교 설정에서 학교를 정했다면 그 학교의 컴시간 시간표를 바로 받습니다. 다른 학교를 찾거나 <b>엑셀 시간표</b> 탭에서 파일(여러 개 가능)을 고를 수도 있습니다.</div></li>
+      <li><div>시험일이 컴시간이 공개한 주(보통 이번 주·다음 주)에 있으면 <b>그 주 실제 시간표</b>를, 아니면 <b>기본 시간표(요일 기준)</b>를 씁니다. 표 위에 날짜별로 어느 쪽을 썼는지 표시됩니다.</div></li>
+      <li><div>표의 <b>시간표 표기</b>(예: 김수*, 국어)를 명단의 교사와 연결합니다. 이름 앞 글자·글자 수·과목으로 자동 연결되고, 후보가 여럿이면 <b>후보 n명 · 선택</b>에서 직접 고릅니다.</div></li>
+      <li><div>적용할 줄을 체크하고 <span class="ui p">적용</span>을 누릅니다. 기존 체크는 그대로 두고 수업 교시만 더하며, 사유가 비어 있으면 <b>교과수업</b>을 넣습니다. 저장 전이면 되돌리기로 취소할 수 있습니다.</div></li>
+    </ol>
+    <div class="note"><b>엑셀 시간표 형식</b><p>제목 행에 요일(<code>월</code> 또는 날짜까지 <code>월(19)</code>), 첫 열에 교시, 칸에 <code>과목↵교사</code> 또는 <code>과목 교사</code>. “고사·시험” 과목은 수업이 아니므로 무시합니다.</p></div>
+  </div>
+  <div class="try" id="t-unav">
+    <div class="try-head"><span class="lbl">직접 해보기 · 감독불가 교사</span><span class="goal">교시를 체크하고 사유를 적은 뒤, 시간표에서 불러오기를 적용해 보세요</span><button class="reset" data-reset="unav">처음으로</button></div>
+    <div class="app"><div class="stage" id="unavStage"></div></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="unavailable" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="mode" data-group="감독 방식" data-title="감독 방식·배정 기준">
+  <div class="ch-head"><div class="path"><span class="num">10</span> 시험 설정 › <b>감독 방식·배정 기준</b></div><h2>감독 방식과 배정 기준, 단독 감독 고사실</h2></div>
+  <div class="ch-body">
+    <div class="two">
+      <div class="card"><span class="case-tag">일반 모드 (기본)</span><h4>고사실 1명 + 복도 감독</h4><p>고사실마다 감독 1명, 복도 구역마다 1명을 배정합니다. 교실 감독과 복도 감독의 무게를 <b>가중치</b>로 다르게 셉니다.</p></div>
+      <div class="card"><span class="case-tag">정/부감독 모드</span><h4>고사실마다 정감독 + 부감독</h4><p>각 고사실에 정·부 두 명을 배정합니다. 복도 감독 자리는 만들지 않고, 모든 감독을 1점으로 셉니다. 1명만 필요한 고사실은 <b>단독 감독 고사실</b>로 지정합니다.</p></div>
+    </div>
+    <h3>일반 모드 설정</h3>
+    <ul class="dots">
+      <li><b>감독 가중치</b>: 교실 2, 복도 1이 기본입니다. 교사별 점수 = 교실 횟수×교실 가중치 + 복도 횟수×복도 가중치. 프로그램은 일반 교사들의 <b>점수 차이(최고−최저)를 먼저 줄이고</b>, 같으면 평균과의 차이를 줄입니다. 0 이상의 소수(예: 1.5)도 됩니다.</li>
+      <li><b>감독 횟수 참고 기준</b>: 전체 기간 교실 감독(기본 6회), 하루 복도 감독(기본 1회). 넘으면 <b>경고</b>만 띄우고 배정을 막지는 않습니다.</li>
+      <li><b>하루 3회 이상 교실 감독 경고 해제</b>: 기본으로는 복도 감독이 없는 날 교실 감독이 3회 이상이면 경고합니다. 교시가 많아 피할 수 없으면 켭니다.</li>
+    </ul>
+    <h3>정/부 모드와 단독 감독 고사실</h3>
+    <ol class="steps">
+      <li><div><b>정/부감독 모드</b> 스위치를 켭니다. 일반 모드 설정은 흐리게 바뀌고 아래에 <b>단독 감독 고사실 설정</b> 표가 나타납니다.</div></li>
+      <li><div>학년 탭을 고르고, 정감독 1명만 둘 칸을 누릅니다. 고사실 이름을 누르면 그 줄(모든 교시) 전체, 교시 머리글을 누르면 그 교시 전체가 한 번에 바뀝니다.</div></li>
+      <li><div>고르지 않은 칸은 정·부 2명을 배치합니다. <span class="ui">전체 해제 · n칸</span>으로 모두 되돌립니다. 자습 교시는 자동으로 정감독만 둡니다.</div></li>
+      <li><div><span class="ui p">설정 저장 및 감독 배정 실행</span>을 누르면 바로 자동 배정으로 이어집니다.</div></li>
+    </ol>
+  </div>
+  <div class="try" id="t-mode">
+    <div class="try-head"><span class="lbl">직접 해보기 · 감독 방식</span><span class="goal">가중치를 바꿔 점수 변화를 보고, 정/부 모드에서 단독 고사실을 골라 보세요</span><button class="reset" data-reset="mode">처음으로</button></div>
+    <div class="app"><div class="stage" id="modeStage"></div></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="mode" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<!-- ===================== 배정표 ===================== -->
+<section class="ch" id="run" data-group="배정표" data-title="자동 배정과 결과 읽기">
+  <div class="ch-head"><div class="path"><span class="num">11</span> <b>배정표</b> › 자동 배정</div><h2>자동 배정 실행과 결과 읽기</h2></div>
+  <div class="ch-body">
+    <ol class="steps">
+      <li><div><span class="ui">배정표</span> 화면 오른쪽 위 <span class="ui p">▷ 자동 배정</span>(또는 감독 방식 화면 아래 버튼)을 누릅니다. 진행률이 표시되며 보통 10초 안팎이 걸립니다. 중간에 <span class="ui">계산 취소</span>를 누르면 이전 결과가 그대로 남습니다.</div></li>
+      <li><div>끝나면 결과가 자동 저장되고 위쪽에 요약이 나옵니다.</div></li>
+    </ol>
+    <div class="tscroll"><table class="ref">
+      <thead><tr><th>요약 항목</th><th>뜻과 할 일</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge-opt" style="background:var(--accent-soft);color:var(--accent-ink)">최적해 확인</span></td><td>입력한 조건 안에서 점수 격차가 가장 작은 배치임을 확인했습니다.</td></tr>
+        <tr><td><span class="badge-opt" style="background:var(--sunk);color:var(--ink-2)">배정안 확보 · 최적성 미확인</span></td><td>제한 시간 안에 좋은 배치안을 찾았지만 더 나은 안이 없는지는 다 확인하지 못했습니다. 그대로 써도 되고, 다시 실행해도 됩니다.</td></tr>
+        <tr><td><b>63 / 63자리 배정</b></td><td>전체 감독 자리 중 채워진 수입니다.</td></tr>
+        <tr><td><b>미배정 n</b></td><td>빈자리입니다. 고사실별 보기에서 빨간 칸을 확인합니다(아래 참고).</td></tr>
+        <tr><td><b>횟수 초과 n</b></td><td>참고 기준을 넘은 교사 수입니다. 경고일 뿐 금지 위반은 아닙니다.</td></tr>
+        <tr><td><b>지정배치 미충족 n</b></td><td>특별교사가 체크한 교시에 감독을 받지 못한 경우입니다. 배치 자리(“복도만” 등)를 확인합니다.</td></tr>
+        <tr><td><span class="ui">검증 내역 보기</span></td><td>프로그램이 결과를 다시 검사한 목록입니다. 경고마다 날짜·교사·사유가 나옵니다.</td></tr>
+      </tbody></table></div>
+    <h3>배정표 읽는 법 (교사별 보기)</h3>
+    <ul class="dots">
+      <li>한 줄이 교사 한 명, 열은 날짜별 교시입니다. <b>배정 점수</b> 칸은 “점수 + 횟수”입니다(예: <b>5</b> 3회).</li>
+      <li>칸에 <b>2-1</b>처럼 고사실 이름이 있으면 감독, <b>—</b>는 감독 없음(빈 시간), 회색 글씨 <i>국어 시험</i>·<i>출장</i>은 그 교시에 감독할 수 없는 이유입니다.</li>
+      <li>정/부 모드에서는 고사실 이름 옆에 <b>정</b> 또는 <b>부</b>가 붙습니다.</li>
+    </ul>
+    <h3>미배정이 생겼다면</h3>
+    <p><span class="ui">고사실별 보기 · 미배정 확인</span>으로 바꾸고 빨간 빈칸을 누르면 원인이 보입니다.</p>
+    <ul class="dots">
+      <li><b>가능 후보 없음 (담당 과목 시험 교시 n명, 감독 불가 교시 n명 …)</b>: 그 교시에 감독할 수 있는 교사가 아예 없습니다. 감독불가 체크를 줄이거나, 특별교사를 지정하거나, 시험 과목이 너무 많이 겹치지 않는지 확인합니다.</li>
+      <li><b>가능 후보 n명 · 동시간 배정 …</b>: 후보는 있지만 그 시간에 모두 다른 고사실을 맡고 있습니다. 같은 교시에 자리가 교사 수보다 많은지 봅니다. 복도 구역을 줄이는 것도 방법입니다.</li>
+    </ul>
+    <div class="note"><b>프로그램이 절대 어기지 않는 조건</b><p>감독 제외 교사, 감독불가 교시, 담임 학급, 감독불가학급, 자기 과목 시험 교시, 같은 교시 중복 배정, (복도 전담의) 교실 배정. 자리를 채우려고 이 조건을 무시하지 않으므로 빈자리로 남습니다.</p></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="run" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="swap" data-group="배정표" data-title="배정 바꾸기 (맞교환·직접 지정)">
+  <div class="ch-head"><div class="path"><span class="num">12</span> <b>배정표</b> › 배정 조정</div><h2>배정 바꾸기: 맞교환, 옮기기, 고사실에 직접 지정</h2></div>
+  <div class="ch-body">
+    <p class="why">자동 배정 뒤 개인 사정으로 감독을 바꿔야 할 때 씁니다. 바꾼 내용은 <b>임시 상태</b>로 있다가 <span class="ui p">변경사항 반영</span>을 눌러야 검증 후 저장됩니다.</p>
+    <h3>방법 1 · 두 교사 맞교환 (교사별 보기)</h3>
+    <ol class="steps">
+      <li><div>바꿀 교사의 칸을 누릅니다. 칸이 진하게 선택되고, <b>같은 날짜·같은 교시</b>의 다른 교사 칸이 <span style="color:var(--accent-ink);font-weight:600">교환 가능</span>(초록 점선) 또는 <span style="color:var(--bad);font-weight:600">교환 불가</span>(붉은색)로 칠해집니다.</div></li>
+      <li><div>교환 가능한 칸을 누르면 즉시 맞바뀝니다. 교환 불가 칸을 누르면 바꾸지 않고 사유(예: “박지우: 담임 학급”)를 보여 줍니다.</div></li>
+      <li><div>선택한 칸을 다시 누르면 선택이 풀립니다. 맞교환은 같은 교시끼리만 됩니다.</div></li>
+    </ol>
+    <h3>방법 2 · 빈 시간 교사에게 옮기기</h3>
+    <p>감독이 있는 칸을 누른 뒤, 같은 교시에 <b>—</b>(빈 시간)인 교사의 칸을 누르면 감독이 그 교사에게 옮겨집니다. 감독 횟수가 많은 교사의 부담을 덜 때 씁니다.</p>
+    <h3>방법 3 · 고사실에 직접 지정 (고사실별 보기)</h3>
+    <ol class="steps">
+      <li><div><span class="ui">고사실별 보기 · 미배정 확인</span>으로 바꿉니다. 한 줄이 고사실, 칸에 감독 교사가 보입니다. 빈자리는 빨갛게 표시됩니다.</div></li>
+      <li><div>칸을 누르면 교사 목록이 열립니다. <b>배정 가능 · 현재 n회</b>, <b>동시간 다른 고사실 배정</b>, 불가 사유가 함께 보입니다.</div></li>
+      <li><div>가능한 교사를 누르면 그 자리에 배정됩니다. <b>미배정</b>을 누르면 자리를 비웁니다.</div></li>
+    </ol>
+    <h3>반영하기</h3>
+    <p>바꾼 것이 있으면 안내 줄 오른쪽에 <b>반영 전 변경 n자리 · 되돌리기 · 모두 취소 · 변경사항 반영</b>이 나타납니다.</p>
+    <ul class="dots">
+      <li><span class="ui">되돌리기</span>: 마지막 조정 하나를 취소합니다.</li>
+      <li><span class="ui">모두 취소</span>: 반영 전 조정을 전부 버리고 마지막 저장 상태로 돌아갑니다.</li>
+      <li><span class="ui p">변경사항 반영</span>: 금지 조건·중복을 다시 검사한 뒤 저장합니다. 반영 전에는 자동 배정, 엑셀 내보내기, 다른 고사 열기를 할 수 없습니다.</li>
+    </ul>
+    <div class="note"><b>점수 확인</b><p>맞교환은 같은 종류 자리끼리면 점수가 그대로지만, 교실↔복도를 바꾸면 두 교사의 점수가 가중치만큼 달라집니다. 바꾼 뒤 <b>배정 점수</b> 칸을 확인하세요. 수동 조정 결과에는 “최적해 확인” 표시가 붙지 않습니다.</p></div>
+  </div>
+  <div class="try" id="t-swap">
+    <div class="try-head"><span class="lbl">직접 해보기 · 배정 조정</span><span class="goal">① 1교시 박지우 ↔ 최서연 교환 ② 3교시 오유진 칸으로 한소윤 감독 옮기기 시도 ③ 반영</span><button class="reset" data-reset="swap">처음으로</button></div>
+    <div class="app"><div class="stage" id="swapStage"></div></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="swap" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="export" data-group="배정표" data-title="엑셀로 내보내기">
+  <div class="ch-head"><div class="path"><span class="num">13</span> <b>배정표</b> › 엑셀로 내보내기</div><h2>엑셀 감독표 만들기</h2></div>
+  <div class="ch-body">
+    <ol class="steps">
+      <li><div>배정표 오른쪽 위 <span class="ui">엑셀로 내보내기</span>를 누릅니다(반영 전 조정이 있으면 먼저 반영).</div></li>
+      <li><div><b>날짜별 감독표</b> 양식을 고릅니다. <b>교사별 + 고사실별</b>(한 장에 두 표를 나란히) / <b>교사별</b>(교사마다 감독할 고사실) / <b>고사실별</b>(고사실마다 감독 교사).</div></li>
+      <li><div><b>전체 배정표 포함</b>을 켜면 교사별 전체(누적 횟수·배정 점수)와 고사실별 전체 시트가 앞에 붙습니다.</div></li>
+      <li><div><span class="ui p">엑셀 파일 저장</span>을 눌러 저장 위치를 고릅니다. 날짜별 감독표는 A4 가로로 인쇄되도록 맞춰집니다.</div></li>
+    </ol>
+  </div>
+  <div class="try" id="t-export">
+    <div class="try-head"><span class="lbl">직접 해보기 · 내보내기 옵션</span><span class="goal">양식을 바꾸면 만들어질 시트 목록이 바뀝니다</span></div>
+    <div class="app"><div id="exportStage"></div></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="export" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="records" data-group="저장·관리" data-title="기록·백업·다른 PC로 옮기기">
+  <div class="ch-head"><div class="path"><span class="num">14</span> <b>기록</b></div><h2>기록, 백업, 다른 PC로 옮기기</h2></div>
+  <div class="ch-body">
+    <ul class="dots">
+      <li><b>기록</b> 화면에는 이 PC에 저장된 고사가 최근 순으로 나옵니다. 눌러서 엽니다. 지금 열린 고사에는 <b>현재 고사</b> 표시가 붙습니다.</li>
+      <li><b>고사 파일 내보내기</b>(상단 ⇩ 아이콘 또는 기록 화면의 <span class="ui">현재 고사 내보내기</span>): 고사 전체(일정·고사실·교사·조건·배정 결과)를 JSON 파일 하나로 저장합니다. 백업과 다른 PC로 옮길 때 씁니다.</li>
+      <li><b>고사 파일 가져오기</b>(상단 ⇪ 아이콘): JSON 파일을 새 고사로 엽니다.</li>
+      <li>저장 파일이 손상되면 직전 정상 백업에서 자동 복구하고 “직전 정상 백업에서 복구했습니다”를 알립니다.</li>
+    </ul>
+    <h3>새 학기에 지난 자료 재사용하기</h3>
+    <ol class="steps">
+      <li><div>지난 고사를 열고 <b>고사 파일 내보내기</b>로 JSON을 저장합니다.</div></li>
+      <li><div><b>고사 파일 가져오기</b>로 그 파일을 엽니다. 새 고사로 들어옵니다.</div></li>
+      <li><div>고사 이름을 바꾸고, 시험일을 지운 뒤 새 날짜·과목을 입력합니다. 전보·휴직 교사를 정리하고 감독불가 체크를 새로 합니다.</div></li>
+      <li><div>자동 배정을 다시 실행합니다.</div></li>
+    </ol>
+    <div class="warn"><b>백업 습관</b><p>고사 자료는 이 PC 안에만 저장됩니다. 배정을 확정하면 JSON 파일과 엑셀 파일을 학교 공용 드라이브나 USB에 함께 보관하세요.</p></div>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="records" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<!-- ===================== 부록 ===================== -->
+<section class="ch" id="rules" data-group="부록" data-title="배정 규칙 한눈에">
+  <div class="ch-head"><div class="path"><span class="num">A</span> 부록</div><h2>배정 규칙 한눈에 보기</h2></div>
+  <div class="ch-body">
+    <h3>반드시 지키는 조건 (어기면 배정·교환 불가)</h3>
+    <div class="tscroll"><table class="ref"><thead><tr><th>표시되는 사유</th><th>설정하는 곳</th></tr></thead><tbody>
+      <tr><td>감독 제외</td><td>교사 명단 › 역할 “감독 제외”</td></tr>
+      <tr><td>감독 불가 교시: 사유</td><td>감독불가 교사 설정 (붉은 − 체크)</td></tr>
+      <tr><td>지정 교시 아님</td><td>특별교사 감독 설정 (파란 ✓를 하지 않은 교시)</td></tr>
+      <tr><td>담임 학급</td><td>교사 명단 › 담임</td></tr>
+      <tr><td>감독불가학급</td><td>교사 명단 › 감독불가학급</td></tr>
+      <tr><td>담당 과목 시험 교시</td><td>교사 명단 › 담당과목 + 시험 일정 과목명</td></tr>
+      <tr><td>복도 전담 / 부감독 전담</td><td>특별교사 배치 자리 “복도만 / 부감독만”</td></tr>
+      <tr><td>중복 배정</td><td>같은 교시에 두 자리를 맡을 수 없음 (자동 검사)</td></tr>
+    </tbody></table></div>
+    <h3>자동 배정이 따르는 우선순위</h3>
+    <ol class="steps">
+      <li><div>특별교사의 지정 교시를 모두 채운다.</div></li>
+      <li><div>빈자리를 최대한 줄인다.</div></li>
+      <li><div>특별교사의 배치 자리 선호(복도 우선 등)를 맞춘다.</div></li>
+      <li><div>일반 교사의 점수 격차(최고−최저)를 줄인다.</div></li>
+      <li><div>같은 격차라면 각 교사와 평균의 차이를 줄인다.</div></li>
+    </ol>
+    <p class="why">횟수 기준(전체 교실 6회, 하루 복도 1회, 하루 교실 2회)은 결과에 경고로만 표시됩니다.</p>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="rules" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="faq" data-group="부록" data-title="문제 해결 FAQ">
+  <div class="ch-head"><div class="path"><span class="num">B</span> 부록</div><h2>자주 묻는 질문과 문제 해결</h2></div>
+  <div class="faqs">
+    <details class="faq"><summary>국어 선생님이 국어 시험 시간에 감독으로 배정됐어요.</summary><div><p>시험 일정의 과목명과 교사의 담당과목 표기가 다를 가능성이 큽니다(예: “국어Ⅰ”과 “국어”, “통사”와 “통합사회”). 둘을 같은 글자로 맞추고 자동 배정을 다시 실행하세요. 배정표를 열면 재검증으로 어긋난 배정이 해제됩니다.</p></div></details>
+    <details class="faq"><summary>시간강사가 한 번도 배정되지 않았어요.</summary><div><p>특별교사는 <a href="#special">특별교사 감독 설정</a>에서 체크한 교시에만 감독합니다. 교시를 체크했는지, 배치 자리가 “복도만”인데 그 교시에 복도 자리가 없지 않은지 확인하세요.</p></div></details>
+    <details class="faq"><summary>미배정 자리가 남아요.</summary><div><p>고사실별 보기에서 빈칸을 눌러 원인을 봅니다. “가능 후보 없음”이면 그 교시에 감독할 수 있는 교사가 없는 것이고, “동시간 배정”이면 자리 수가 가용 교사보다 많은 것입니다. 감독불가 체크를 다시 보거나 복도 구역을 줄이거나 특별교사를 지정하세요. 꼭 필요한 경우 고사실별 보기에서 직접 지정합니다.</p></div></details>
+    <details class="faq"><summary>맞교환을 누르면 “교환은 같은 날짜, 같은 교시에서만 가능합니다”라고 나와요.</summary><div><p>맞교환은 같은 교시끼리만 됩니다. 다른 교시의 감독을 바꾸려면 두 번의 교환으로 나누거나, 고사실별 보기에서 각 자리를 직접 지정하세요.</p></div></details>
+    <details class="faq"><summary>교환 불가로 나오는데 이유를 알고 싶어요.</summary><div><p>붉은 칸을 누르면 “교사 이름: 사유” 형태로 이유가 나옵니다(담임 학급, 감독불가학급, 담당 과목 시험 교시, 감독 불가 교시 등). 조건이 잘못 입력됐다면 교사 설정에서 고친 뒤 다시 시도하세요.</p></div></details>
+    <details class="faq"><summary>컴시간 검색에서 학교가 나오지 않아요.</summary><div><p>학교 이름을 줄여(예: “서울중앙고” → “중앙고”) 검색하세요. 인터넷 연결이 필요하며, 학교가 컴시간을 쓰지 않으면 엑셀·Google Sheets로 불러옵니다.</p></div></details>
+    <details class="faq"><summary>Google Sheets 링크를 넣었는데 불러오지 못해요.</summary><div><p>시트 공유 설정이 “링크가 있는 모든 사용자(뷰어)”인지 확인하세요. 학교 계정 정책으로 외부 공유가 막혀 있으면 시트를 엑셀(.xlsx)로 내려받아 파일로 불러옵니다.</p></div></details>
+    <details class="faq"><summary>엑셀 내보내기 버튼이 눌리지 않아요.</summary><div><p>반영하지 않은 배정 조정이 있으면 내보낼 수 없습니다. 안내 줄의 <span class="ui p">변경사항 반영</span> 또는 <span class="ui">모두 취소</span>를 먼저 누르세요.</p></div></details>
+    <details class="faq"><summary>점수 차이가 너무 커요.</summary><div><p>담임·담당과목·감독불가 체크가 많은 교사는 감독할 수 있는 교시 자체가 적어 점수가 낮을 수밖에 없습니다. “최적성 미확인”이면 자동 배정을 한 번 더 실행해 보세요. 가중치(교실 2·복도 1)를 학교 기준에 맞게 바꾸는 것도 방법입니다.</p></div></details>
+    <details class="faq"><summary>다른 PC에서 이어서 작업하고 싶어요.</summary><div><p>지금 PC에서 고사 파일 내보내기(JSON) → 새 PC에서 고사 파일 가져오기.</p></div></details>
+  </div>
+  <div class="done-row"><button class="done-btn" data-done="faq" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<section class="ch" id="keys" data-group="부록" data-title="단축키">
+  <div class="ch-head"><div class="path"><span class="num">C</span> 부록</div><h2>단축키</h2></div>
+  <div class="tscroll"><table class="ref"><thead><tr><th>키</th><th>동작</th><th>쓰는 곳</th></tr></thead><tbody>
+    <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>저장</td><td>모든 화면</td></tr>
+    <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td>되돌리기</td><td>모든 화면 (입력칸 안에서는 글자 되돌리기)</td></tr>
+    <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd></td><td>다시 실행</td><td>모든 화면</td></tr>
+    <tr><td><kbd>Enter</kbd></td><td>아래 칸으로</td><td>시험 일정 과목 칸</td></tr>
+    <tr><td><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></td><td>칸 이동 (좌우는 글자 끝에서, 옆 날짜로 이어짐)</td><td>시험 일정 과목 칸</td></tr>
+    <tr><td><kbd>Esc</kbd></td><td>입력 취소 / 창 닫기</td><td>과목 칸, 선택창</td></tr>
+  </tbody></table></div>
+  <div class="done-row"><button class="done-btn" data-done="keys" aria-pressed="false">이 단계 확인함</button></div>
+</section>
+
+<footer class="end">Oni 감독 v1.3 사용 설명서 · 연습 화면의 학교·교사 이름은 모두 예시입니다.</footer>
+</main>
+</div>
